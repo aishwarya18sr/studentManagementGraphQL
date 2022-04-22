@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Students extends Model {
     /**
@@ -15,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Students.init({
     name: DataTypes.STRING,
-    roll_no: DataTypes.INTEGER,
+    rollNo: DataTypes.INTEGER,
     class: DataTypes.STRING,
     section: DataTypes.STRING,
-    marks: DataTypes.INTEGER
+    totalMarks: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Students',
