@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-keys */
 /* eslint-disable max-len */
 const express = require('express');
 const env = require('dotenv');
