@@ -34,6 +34,26 @@ const getStudentsByMarks = async (givenTotalMarks) => {
   return students;
 };
 
+const updateStudent = async (givenRollNo, givenName, givenClass, givenSection, givenTotalMarks) => {
+  await Students.update({
+    name: givenName,
+    class: givenClass,
+    section: givenSection,
+    totalMarks: givenTotalMarks,
+  }, {
+    where: {
+      rollNo: givenRollNo,
+    },
+  });
+  const students = await Students.findOne({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    where: {
+      rollNo: givenRollNo,
+    },
+  });
+  return students;
+};
+
 module.exports = {
-  getStudentsByClass, getStudentsByClassSection, getStudentsByMarks,
+  getStudentsByClass, getStudentsByClassSection, getStudentsByMarks, updateStudent,
 };

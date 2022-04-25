@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-console */
 const express = require('express');
 const env = require('dotenv');
@@ -66,8 +67,28 @@ const rootQueryType = new GraphQLObjectType({
   }),
 });
 
+const RootMutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'Root Mutation',
+  fields: () => ({
+    updateStudent: {
+      type: StudentType,
+      description: 'Update a student',
+      args: {
+        rollNo: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        class: { type: new GraphQLNonNull(GraphQLInt) },
+        section: { type: new GraphQLNonNull(GraphQLString) },
+        totalMarks: { type: new GraphQLNonNull(GraphQLFloat) },
+      },
+      resolve: (parent, args) => dbOperations.updateStudent(args.rollNo, args.name, args.class, args.section, args.totalMarks),
+    },
+  }),
+});
+
 const schema = new GraphQLSchema({
   query: rootQueryType,
+  mutation: RootMutationType,
 });
 
 app.use('/graphql', graphqlHTTP({
