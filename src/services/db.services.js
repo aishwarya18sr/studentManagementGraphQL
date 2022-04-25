@@ -34,8 +34,22 @@ const addStudent = async (studentName, studentClass, section, rollNo, totalMarks
   return students;
 };
 
+const deleteStudent = async (id) => {
+  await Students.destroy({
+    where: {
+      id,
+    },
+  });
+  const students = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    order: [['id', 'ASC']],
+  });
+  return students;
+};
+
 module.exports = {
   addStudent,
   getStudentById,
   getStudents,
+  deleteStudent,
 };

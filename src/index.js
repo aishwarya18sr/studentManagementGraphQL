@@ -48,6 +48,7 @@ const rootQueryType = new GraphQLObjectType({
     },
   }),
 });
+
 const RootMutationType = new GraphQLObjectType({
   name: 'Mutation',
   description: 'Root Mutation',
@@ -63,6 +64,14 @@ const RootMutationType = new GraphQLObjectType({
         totalMarks: { type: new GraphQLNonNull(GraphQLInt) },
       },
       resolve: (parent, args) => dbOperations.addStudent(args.studentName, args.studentClass, args.section, args.rollNo, args.totalMarks),
+    },
+    deleteStudent: {
+      type: new GraphQLList(StudentType),
+      description: 'Delete a student',
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: (parent, args) => dbOperations.deleteStudent(args.id),
     },
   }),
 });
