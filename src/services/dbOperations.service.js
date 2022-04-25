@@ -1,5 +1,51 @@
 const { Students } = require('../../models');
 
+const getStudents = async () => {
+  const students = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    order: [['id', 'ASC']],
+  });
+  return students;
+};
+
+const getStudentById = async (id) => {
+  const student = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    where: {
+      id,
+    },
+  });
+  return student;
+};
+
+const addStudent = async (studentName, studentClass, section, rollNo, totalMarks) => {
+  const obj = {
+    name: studentName,
+    class: studentClass,
+    section,
+    rollNo,
+    totalMarks,
+  };
+  await Students.create(obj);
+  const students = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    order: [['id', 'ASC']],
+  });
+  return students;
+};
+
+const deleteStudent = async (id) => {
+  await Students.destroy({
+    where: {
+      id,
+    },
+  });
+  const students = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    order: [['id', 'ASC']],
+  });
+  return students;
+};
 const getStudentsByClass = async (givenClass) => {
   const students = await Students.findAll({
     attributes: { exclude: ['createdAt,updatedAt'] },
@@ -34,26 +80,34 @@ const getStudentsByMarks = async (givenTotalMarks) => {
   return students;
 };
 
-const updateStudent = async (givenRollNo, givenName, givenClass, givenSection, givenTotalMarks) => {
+const updateStudent = async (givenId, givenRollNo, givenName, givenClass, givenSection, givenTotalMarks) => {
   await Students.update({
+    id: givenId,
     name: givenName,
     class: givenClass,
     section: givenSection,
     totalMarks: givenTotalMarks,
   }, {
     where: {
-      rollNo: givenRollNo,
+      id: givenId,
     },
   });
   const students = await Students.findOne({
     attributes: { exclude: ['createdAt,updatedAt'] },
     where: {
-      rollNo: givenRollNo,
+      id: givenId,
     },
   });
   return students;
 };
 
 module.exports = {
-  getStudentsByClass, getStudentsByClassSection, getStudentsByMarks, updateStudent,
+  addStudent,
+  getStudentById,
+  getStudents,
+  deleteStudent,
+  getStudentsByClass,
+  getStudentsByClassSection,
+  getStudentsByMarks,
+  updateStudent,
 };
