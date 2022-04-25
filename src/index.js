@@ -103,6 +103,19 @@ const RootMutationType = new GraphQLObjectType({
       },
       resolve: (parent, args) => dbOperations.deleteStudent(args.id),
     },
+    updateStudent: {
+      type: StudentType,
+      description: 'Update a student',
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        rollNo: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        class: { type: new GraphQLNonNull(GraphQLInt) },
+        section: { type: new GraphQLNonNull(GraphQLString) },
+        totalMarks: { type: new GraphQLNonNull(GraphQLFloat) },
+      },
+      resolve: (parent, args) => dbOperations.updateStudent(args.id, args.rollNo, args.name, args.class, args.section, args.totalMarks),
+    },
   }),
 });
 

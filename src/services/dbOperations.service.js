@@ -52,6 +52,7 @@ const getStudentsByClass = async (givenClass) => {
     where: {
       class: givenClass,
     },
+    order: [['id', 'ASC']],
   });
   return students;
 };
@@ -79,6 +80,27 @@ const getStudentsByMarks = async (givenTotalMarks) => {
   return students;
 };
 
+const updateStudent = async (givenId, givenRollNo, givenName, givenClass, givenSection, givenTotalMarks) => {
+  await Students.update({
+    id: givenId,
+    name: givenName,
+    class: givenClass,
+    section: givenSection,
+    totalMarks: givenTotalMarks,
+  }, {
+    where: {
+      id: givenId,
+    },
+  });
+  const students = await Students.findOne({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    where: {
+      id: givenId,
+    },
+  });
+  return students;
+};
+
 module.exports = {
   addStudent,
   getStudentById,
@@ -87,4 +109,5 @@ module.exports = {
   getStudentsByClass,
   getStudentsByClassSection,
   getStudentsByMarks,
+  updateStudent,
 };
