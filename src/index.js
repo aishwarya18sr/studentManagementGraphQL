@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const express = require('express');
 const env = require('dotenv');
 const { graphqlHTTP } = require('express-graphql');
@@ -11,6 +10,7 @@ const {
   GraphQLString,
   GraphQLFloat,
 } = require('graphql');
+
 const dbOperations = require('./services/dbOperations.service');
 
 env.config();
@@ -63,11 +63,52 @@ const rootQueryType = new GraphQLObjectType({
       },
       resolve: (parent, args) => dbOperations.getStudentsByMarks(args.totalMarks),
     },
+    students: {
+      type: new GraphQLList(StudentType),
+      description: 'List of all the students ',
+      resolve: () => dbOperations.getStudents(),
+    },
+    student: {
+      type: new GraphQLList(StudentType),
+      description: 'Details of a student based on id',
+      args: {
+        id: { type: GraphQLInt },
+      },
+      resolve: (parent, args) => dbOperations.getStudentById(args.id),
+    },
+  }),
+});
+
+const RootMutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  description: 'Root Mutation',
+  fields: () => ({
+    addStudent: {
+      type: new GraphQLList(StudentType),
+      description: 'Add a student',
+      args: {
+        studentName: { type: new GraphQLNonNull(GraphQLString) },
+        studentClass: { type: new GraphQLNonNull(GraphQLInt) },
+        section: { type: new GraphQLNonNull(GraphQLString) },
+        rollNo: { type: new GraphQLNonNull(GraphQLInt) },
+        totalMarks: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: (parent, args) => dbOperations.addStudent(args.studentName, args.studentClass, args.section, args.rollNo, args.totalMarks),
+    },
+    deleteStudent: {
+      type: new GraphQLList(StudentType),
+      description: 'Delete a student',
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve: (parent, args) => dbOperations.deleteStudent(args.id),
+    },
   }),
 });
 
 const schema = new GraphQLSchema({
   query: rootQueryType,
+  mutation: RootMutationType,
 });
 
 app.use('/graphql', graphqlHTTP({
