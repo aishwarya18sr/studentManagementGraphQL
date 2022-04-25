@@ -9,6 +9,7 @@ const {
   GraphQLNonNull,
   GraphQLInt,
   GraphQLString,
+  GraphQLFloat,
 } = require('graphql');
 const dbOperations = require('./services/dbOperations.service');
 
@@ -49,6 +50,18 @@ const rootQueryType = new GraphQLObjectType({
         section: { type: GraphQLString },
       },
       resolve: (parent, args) => dbOperations.getStudentsByClassSection(args.class, args.section),
+    },
+    studentsMarks: {
+      type: new GraphQLList(StudentType),
+      description: 'List of all the students filtered based on the marks',
+      args: {
+        totalMarks: { type: GraphQLFloat },
+      },
+      filter: (parent, args) => {
+        console.log(args);
+        return dbOperations.getStudentsByMarks(args.totalMarks);
+      },
+      resolve: (parent, args) => dbOperations.getStudentsByMarks(args.totalMarks),
     },
   }),
 });

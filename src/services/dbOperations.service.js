@@ -23,6 +23,17 @@ const getStudentsByClassSection = async (givenClass, givenSection) => {
   return students;
 };
 
+const getStudentsByMarks = async (givenTotalMarks) => {
+  const students = await Students.findAll({
+    attributes: { exclude: ['createdAt,updatedAt'] },
+    where: {
+      totalMarks: givenTotalMarks,
+    },
+    order: [['id', 'ASC']],
+  });
+  return students;
+};
+
 module.exports = {
-  getStudentsByClass, getStudentsByClassSection,
+  getStudentsByClass, getStudentsByClassSection, getStudentsByMarks,
 };
