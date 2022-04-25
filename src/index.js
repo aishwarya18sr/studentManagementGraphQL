@@ -41,6 +41,15 @@ const rootQueryType = new GraphQLObjectType({
       },
       resolve: (parent, args) => dbOperations.getStudentsByClass(args.class),
     },
+    studentsClassSection: {
+      type: new GraphQLList(StudentType),
+      description: 'List of all the students filtered based on the class and section',
+      args: {
+        class: { type: GraphQLInt },
+        section: { type: GraphQLString },
+      },
+      resolve: (parent, args) => dbOperations.getStudentsByClassSection(args.class, args.section),
+    },
     students: {
       type: new GraphQLList(StudentType),
       description: 'List of all the students ',
