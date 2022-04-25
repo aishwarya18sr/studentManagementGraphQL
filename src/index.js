@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const express = require('express');
 const env = require('dotenv');
 const { graphqlHTTP } = require('express-graphql');
@@ -10,7 +9,8 @@ const {
   GraphQLInt,
   GraphQLString,
 } = require('graphql');
-const dbOperations = require('./services/db.services');
+
+const dbOperations = require('./services/dbOperations.service');
 
 env.config();
 const port = process.env.PORT || 8000;
@@ -33,6 +33,14 @@ const rootQueryType = new GraphQLObjectType({
   name: 'Query',
   description: 'Root query',
   fields: () => ({
+    studentsClass: {
+      type: new GraphQLList(StudentType),
+      description: 'List of all the students filtered based on the class',
+      args: {
+        class: { type: GraphQLInt },
+      },
+      resolve: (parent, args) => dbOperations.getStudentsByClass(args.class),
+    },
     students: {
       type: new GraphQLList(StudentType),
       description: 'List of all the students ',
