@@ -58,7 +58,7 @@ const rootQueryType = new GraphQLObjectType({
       resolve: () => dbOperations.getStudents(),
     },
     student: {
-      type: new GraphQLList(StudentType),
+      type: StudentType,
       description: 'Details of a student based on id',
       args: {
         id: { type: GraphQLInt },
@@ -73,7 +73,7 @@ const RootMutationType = new GraphQLObjectType({
   description: 'Root Mutation',
   fields: () => ({
     addStudent: {
-      type: new GraphQLList(StudentType),
+      type: StudentType,
       description: 'Add a student',
       args: {
         studentName: { type: new GraphQLNonNull(GraphQLString) },

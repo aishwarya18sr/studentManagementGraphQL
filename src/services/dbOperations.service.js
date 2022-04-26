@@ -9,7 +9,7 @@ const getStudents = async () => {
 };
 
 const getStudentById = async (id) => {
-  const student = await Students.findAll({
+  const student = await Students.findOne({
     attributes: { exclude: ['createdAt,updatedAt'] },
     where: {
       id,
@@ -27,9 +27,9 @@ const addStudent = async (studentName, studentClass, section, rollNo, totalMarks
     totalMarks,
   };
   await Students.create(obj);
-  const students = await Students.findAll({
+  const students = await Students.findOne({
     attributes: { exclude: ['createdAt,updatedAt'] },
-    order: [['id', 'ASC']],
+    where: obj,
   });
   return students;
 };
